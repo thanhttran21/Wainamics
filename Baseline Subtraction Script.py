@@ -127,7 +127,7 @@ def generate_plot(date, file_name):
     df_other = pd.read_excel(file_name, sheet_name='Others')
     additional_notes = parse_other(df_other.iloc[:,0])
     plt.suptitle(file_name + "\n" + str(date), fontsize = 14)
-    plt.text(0, 0.65, additional_notes)
+    plt.text(0, 0, additional_notes)
 
     png_name = file_name[:len(file_name)-5]
     plt.savefig(png_name + '.png', dpi = 300)

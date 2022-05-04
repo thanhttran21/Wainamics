@@ -8,6 +8,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Change STARTING_ROW for when to begin parsing data. This is to account for any initial data.
+STARTING_ROW = 5
+
 SECONDS_PER_SAMPLE = 10
 
 # Line of best fit times in seconds
@@ -61,9 +64,9 @@ def generate_plot(date, file_name):
     plt.xticks([0, 1200, 2400, 3600])
     plt.grid(True)
 
-    plt.plot(time, df['Channel 1'], label='Channel 1')
-    plt.plot(time, df['Channel 2'], label='Channel 2')
-    plt.plot(time, df['Channel 3'], label='Channel 3')
+    plt.plot(time[STARTING_ROW:], df.iloc[STARTING_ROW:,1], label='Channel 1')
+    plt.plot(time[STARTING_ROW:], df.iloc[STARTING_ROW:,2], label='Channel 2')
+    plt.plot(time[STARTING_ROW:], df.iloc[STARTING_ROW:,3], label='Channel 3')
 
     plt.legend()
 
@@ -77,13 +80,13 @@ def generate_plot(date, file_name):
     plt.yticks([1, 2, 3, 4, 5, 6])
     plt.grid(True)
 
-    norm_ch1 = df.iloc[:,1].astype(float) / df.iloc[0,1]
-    norm_ch2 = df.iloc[:,2].astype(float) / df.iloc[0,2]
-    norm_ch3 = df.iloc[:,3].astype(float) / df.iloc[0,3]
+    norm_ch1 = df.iloc[STARTING_ROW:,1].astype(float) / df.iloc[STARTING_ROW,1]
+    norm_ch2 = df.iloc[STARTING_ROW:,2].astype(float) / df.iloc[STARTING_ROW,2]
+    norm_ch3 = df.iloc[STARTING_ROW:,3].astype(float) / df.iloc[STARTING_ROW,3]
 
-    plt.plot(time, norm_ch1, label='Channel 1')
-    plt.plot(time, norm_ch2, label='Channel 2')
-    plt.plot(time, norm_ch3, label='Channel 3')
+    plt.plot(time[STARTING_ROW:], norm_ch1, label='Channel 1')
+    plt.plot(time[STARTING_ROW:], norm_ch2, label='Channel 2')
+    plt.plot(time[STARTING_ROW:], norm_ch3, label='Channel 3')
 
     plt.legend()
 
@@ -95,29 +98,29 @@ def generate_plot(date, file_name):
     plt.xticks([0, 1200, 2400, 3600])
     plt.grid(True)
 
-    ch1_m, ch1_b = generate_baseline_eq(df.iloc[:,1])
-    ch2_m, ch2_b = generate_baseline_eq(df.iloc[:,2])
-    ch3_m, ch3_b = generate_baseline_eq(df.iloc[:,3])
+    ch1_m, ch1_b = generate_baseline_eq(df.iloc[STARTING_ROW:,1])
+    ch2_m, ch2_b = generate_baseline_eq(df.iloc[STARTING_ROW:,2])
+    ch3_m, ch3_b = generate_baseline_eq(df.iloc[STARTING_ROW:,3])
 
     ch1_eq = lambda x: ch1_m * x + ch1_b
     ch2_eq = lambda x: ch2_m * x + ch2_b
     ch3_eq = lambda x: ch3_m * x + ch3_b
 
-    ch1_exp = [ch1_eq(x) for x in time]
-    ch2_exp = [ch2_eq(x) for x in time]
-    ch3_exp = [ch3_eq(x) for x in time]
+    ch1_exp = [ch1_eq(x) for x in time[STARTING_ROW:]]
+    ch2_exp = [ch2_eq(x) for x in time[STARTING_ROW:]]
+    ch3_exp = [ch3_eq(x) for x in time[STARTING_ROW:]]
 
-    ch1_baseline_sub = np.subtract(df.iloc[:,1], ch1_exp)
-    ch2_baseline_sub = np.subtract(df.iloc[:,2], ch2_exp)
-    ch3_baseline_sub = np.subtract(df.iloc[:,3], ch3_exp)
+    ch1_baseline_sub = np.subtract(df.iloc[STARTING_ROW:,1], ch1_exp)
+    ch2_baseline_sub = np.subtract(df.iloc[STARTING_ROW:,2], ch2_exp)
+    ch3_baseline_sub = np.subtract(df.iloc[STARTING_ROW:,3], ch3_exp)
 
     ch1_exp_form = "Channel 1: y = " + str(round(ch1_m, 4)) + "x + " + str(round(ch1_b, 4))
     ch2_exp_form = "Channel 1: y = " + str(round(ch2_m, 4)) + "x + " + str(round(ch2_b, 4))
     ch3_exp_form = "Channel 1: y = " + str(round(ch3_m, 4)) + "x + " + str(round(ch3_b, 4))
 
-    plt.plot(time, ch1_baseline_sub, label=ch1_exp_form)
-    plt.plot(time, ch2_baseline_sub, label=ch2_exp_form)
-    plt.plot(time, ch3_baseline_sub, label=ch3_exp_form)
+    plt.plot(time[STARTING_ROW:], ch1_baseline_sub, label=ch1_exp_form)
+    plt.plot(time[STARTING_ROW:], ch2_baseline_sub, label=ch2_exp_form)
+    plt.plot(time[STARTING_ROW:], ch3_baseline_sub, label=ch3_exp_form)
 
     plt.legend()
 

@@ -8,9 +8,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Change STARTING_ROW for when to begin parsing data. This is to account for any initial data.
+# Change STARTING_ROW for when to begin parsing data. This is to account for any initial data
 STARTING_ROW = 5
 
+# Change SECONDS_PER_SAMPLE depending on how often the machine samples data
 SECONDS_PER_SAMPLE = 10
 
 # Line of best fit times in seconds

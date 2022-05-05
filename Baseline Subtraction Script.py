@@ -50,7 +50,7 @@ def generate_plot(date, file_name):
     if not ".xlsx" in file_name or "~$" in file_name:
         return
 
-    df = pd.read_excel(file_name)
+    df = pd.read_excel(file_name, sheet_name='Optics')
     
     time = calculate_time(df.iloc[:, 0])
 
